@@ -1,1 +1,115 @@
 # Missing values
+
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(knitr)
+```
+
+```{r}
+load(file="data/trips.RData")
+```
+
+Ok, let us find some NA's
+
+```{r}
+level <- c("Number of NA's National: ",
+           "Number of NA's State: ",
+           "Number of NA's County: ")
+na_s <- c(sum(is.na(trips.national$Number.of.Trips)),
+          sum(is.na(trips.state$Number.of.Trips)),
+          sum(is.na(trips.county$Number.of.Trips)))
+kable(cbind(level,na_s),format="html")
+```
+
+We can see here that the NA values only occur at the county level. So, lets find out where those NA’s exist. 
+
+```{r}
+summary(trips.county)
+```
+
+From the summary we can see that there is an equal 5779 NA’s for each numeric column thus, upon further inspection, 5779 rows are fully incomplete for trips data. So, let us isolate the NA rows for further inspection.  
+
+```{r}
+trips.na <- trips.county[is.na(trips.county$Number.of.Trips),]
+```
+
+
+Frist, since this data is a timeseries, let’s check the dates to see if there is a pattern. 
+
+```{r warning=FALSE}
+trips.na %>% 
+  group_by(Date) %>% 
+  summarise(count=n()) %>% 
+  arrange(desc(count)) %>% 
+  head(10) %>% 
+  kable(.,format="html")
+```
+
+From this we see the vast majority of NA occur on 2021-03-26, which is one day before the ending day of the dataset. Thus, we can conclude that the rows for second to last day have been created for data input but have not updated by the time of data procurement. Thus, removing the last two days from the dataset will reduce potential error and will not affect analysis of mobility on COVID-19 rates from January 2020 to March 2021. 
+
+```{r}
+trips.county <- trips.county[trips.county$Date < "2021-03-26",]
+
+total_days <- max(trips.county$Date) - min(trips.county$Date)
+total_days
+```
+
+Here we can see that there are 428 total days in the dataset so, lets narrow down the search to counties with > 10% of missing data. (10% is chosen because 90% of available data could still provide accurate insights for trips data)   
+
+```{r warning= FALSE}
+high.na <- trips.na %>% 
+  group_by(State) %>% 
+  count(County) %>% 
+  filter(., n > total_days *0.1) 
+
+kable(head(high.na))
+```
+
+There are 22 counties with high rates of NA values. Thus, these are the counties that could be most problematic when analyzing at a county scale. So, lets save the data frame of these top NA violators for future reference when further micro analysis is desired within these areas. 
+
+```{r}
+#save(high.na, file="high_NA_areas.RDS")
+```
+
+Now to consider, would the NA values from certain counties affect State level analysis? To find out let’s plot the states with county NA values. 
+
+```{r}
+trips.na %>% 
+  group_by(State) %>% 
+  summarise(count=n()) %>% 
+
+ggplot(aes(y=reorder(State,count),x=count))+
+  geom_bar(stat='identity',fill="#00bfc4")+
+  labs(y="State",title="NA County by State")
+
+```
+
+Here we can see the states with the majority of the NA values, lets pick the top 5 (AK, NE, MT, TX, HI) and see how much the NA values impact the aggregate state values. 
+
+```{r}
+top.na <- trips.na %>% 
+  group_by(State) %>% 
+  summarise(count=n()) %>%
+  mutate(na = TRUE) %>% 
+  top_n(n=5,wt=count) 
+
+top <- subset(trips.county, trips.county$State %in% top.na$State)
+top <- top %>% 
+  group_by(State) %>% 
+  summarise(count=n()) %>% 
+  mutate(na = FALSE)
+top <- rbind(top,top.na)
+
+
+ggplot(top, aes(y=reorder(State,count),x=count, fill=na))+
+  geom_bar(position="stack",stat="identity")+
+  labs(y="State",title="NA State Values as Proportion of Total")
+  
+```
+
+We can see by the above stacked bar plot that the NA values account for a negligible amount of total values from each of the top NA states. Thus, the NA values should be of note, but of not much concern when considering total trips by distance for each state. <br>
+
+
+With this analysis of NA values, the decision to leave the NA rows in the dataset is made for continuity of county timelines. 

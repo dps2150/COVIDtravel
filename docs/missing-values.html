@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 4 Missing values | YOUR TITLE HERE</title>
-  <meta name="description" content="Chapter 4 Missing values | YOUR TITLE HERE" />
-  <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
+  <title>Chapter 4 Missing values | Covid Travel</title>
+  <meta name="description" content="Chapter 4 Missing values | Covid Travel" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 4 Missing values | YOUR TITLE HERE" />
+  <meta property="og:title" content="Chapter 4 Missing values | Covid Travel" />
   <meta property="og:type" content="book" />
   
   
@@ -16,15 +16,15 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 4 Missing values | YOUR TITLE HERE" />
+  <meta name="twitter:title" content="Chapter 4 Missing values | Covid Travel" />
   
   
   
 
-<meta name="author" content="YOUR NAMES HERE" />
+<meta name="author" content="Daniel Minwoo Pranav" />
 
 
-<meta name="date" content="2020-11-09" />
+<meta name="date" content="2021-04-11" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,7 +33,6 @@
   
 <link rel="prev" href="data-transformation.html"/>
 <link rel="next" href="results.html"/>
-<script src="libs/header-attrs-2.3/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -51,7 +50,6 @@
 
 
 
-<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 
 
 
@@ -68,7 +66,7 @@
       <nav role="navigation">
 
 <ul class="summary">
-<li><a href="./">SHORT TITLE HERE</a></li>
+<li><a href="./">TITLE HERE</a></li>
 
 <li class="divider"></li>
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
@@ -89,7 +87,7 @@
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">YOUR TITLE HERE</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Covid Travel</a>
           </h1>
         </div>
 
@@ -97,8 +95,243 @@
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="missing-values" class="section level1" number="4">
+<div id="missing-values" class="section level1">
 <h1><span class="header-section-number">Chapter 4</span> Missing values</h1>
+<p>Ok, let us find some NA’s</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+level
+</th>
+<th style="text-align:left;">
+na_s
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Number of NA’s National:
+</td>
+<td style="text-align:left;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Number of NA’s State:
+</td>
+<td style="text-align:left;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Number of NA’s County:
+</td>
+<td style="text-align:left;">
+5779
+</td>
+</tr>
+</tbody>
+</table>
+<p>We can see here that the NA values only occur at the county level. So, lets find out where those NA’s exist.</p>
+<pre><code>##       Date              State.FIPS        State         County.FIPS   
+##  Min.   :2020-01-22   Min.   : 1.00   TX     :109474   Min.   : 1001  
+##  1st Qu.:2020-05-08   1st Qu.:18.00   GA     : 68529   1st Qu.:18177  
+##  Median :2020-08-24   Median :29.00   VA     : 57323   Median :29176  
+##  Mean   :2020-08-24   Mean   :30.28   KY     : 51720   Mean   :30384  
+##  3rd Qu.:2020-12-10   3rd Qu.:45.00   MO     : 49565   3rd Qu.:45081  
+##  Max.   :2021-03-27   Max.   :56.00   KS     : 45255   Max.   :56045  
+##                                       (Other):972336                  
+##                County        Population.Staying.at.Home
+##  Washington County:  12930   Min.   :     10           
+##  Jefferson County :  10775   1st Qu.:   2185           
+##  Franklin County  :  10344   Median :   5221           
+##  Jackson County   :   9913   Mean   :  25984           
+##  Lincoln County   :   9913   3rd Qu.:  15053           
+##  Madison County   :   8189   Max.   :4131225           
+##  (Other)          :1292138   NA&#39;s   :5779              
+##  Population.Not.Staying.at.Home Number.of.Trips    Number.of.Trips..1
+##  Min.   :    117                Min.   :     227   Min.   :       0  
+##  1st Qu.:   8826                1st Qu.:   37386   1st Qu.:    8051  
+##  Median :  20719                Median :   88712   Median :   19530  
+##  Mean   :  78593                Mean   :  325210   Mean   :   82383  
+##  3rd Qu.:  54017                3rd Qu.:  231308   3rd Qu.:   52890  
+##  Max.   :8636354                Max.   :43031242   Max.   :12335889  
+##  NA&#39;s   :5779                   NA&#39;s   :5779       NA&#39;s   :5779      
+##  Number.of.Trips.1.3 Number.of.Trips.3.5 Number.of.Trips.5.10 Number.of.Trips.10.25
+##  Min.   :       0    Min.   :      0     Min.   :      0      Min.   :      0      
+##  1st Qu.:    8345    1st Qu.:   3548     1st Qu.:   4909      1st Qu.:   5829      
+##  Median :   21520    Median :   9989     Median :  12433      Median :  13901      
+##  Mean   :   80587    Mean   :  39327     Mean   :  49127      Mean   :  47670      
+##  3rd Qu.:   57947    3rd Qu.:  28213     3rd Qu.:  34078      3rd Qu.:  35061      
+##  Max.   :11401040    Max.   :5423126     Max.   :6535454      Max.   :5844180      
+##  NA&#39;s   :5779        NA&#39;s   :5779        NA&#39;s   :5779         NA&#39;s   :5779         
+##  Number.of.Trips.25.50 Number.of.Trips.50.100 Number.of.Trips.100.250
+##  Min.   :      0       Min.   :     0         Min.   :     0         
+##  1st Qu.:   3013       1st Qu.:  1184         1st Qu.:   424         
+##  Median :   6412       Median :  2598         Median :   967         
+##  Mean   :  16454       Mean   :  6086         Mean   :  2678         
+##  3rd Qu.:  14435       3rd Qu.:  5742         3rd Qu.:  2301         
+##  Max.   :1859953       Max.   :555732         Max.   :356594         
+##  NA&#39;s   :5779          NA&#39;s   :5779           NA&#39;s   :5779           
+##  Number.of.Trips.250.500 Number.of.Trips...500
+##  Min.   :    0.0         Min.   :     0.0     
+##  1st Qu.:   57.0         1st Qu.:    11.0     
+##  Median :  166.0         Median :    41.0     
+##  Mean   :  574.5         Mean   :   323.7     
+##  3rd Qu.:  442.0         3rd Qu.:   150.0     
+##  Max.   :90947.0         Max.   :125691.0     
+##  NA&#39;s   :5779            NA&#39;s   :5779</code></pre>
+<p>From the summary we can see that there is an equal 5779 NA’s for each numeric column thus, upon further inspection, 5779 rows are fully incomplete for trips data. So, let us isolate the NA rows for further inspection.</p>
+<p>Frist, since this data is a timeseries, let’s check the dates to see if there is a pattern.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+Date
+</th>
+<th style="text-align:right;">
+count
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+2021-03-26
+</td>
+<td style="text-align:right;">
+1228
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2020-11-29
+</td>
+<td style="text-align:right;">
+113
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2020-09-06
+</td>
+<td style="text-align:right;">
+101
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2020-07-04
+</td>
+<td style="text-align:right;">
+99
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2020-07-03
+</td>
+<td style="text-align:right;">
+93
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2020-07-02
+</td>
+<td style="text-align:right;">
+91
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2020-09-07
+</td>
+<td style="text-align:right;">
+88
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2020-07-01
+</td>
+<td style="text-align:right;">
+87
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2020-06-30
+</td>
+<td style="text-align:right;">
+85
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2020-06-29
+</td>
+<td style="text-align:right;">
+79
+</td>
+</tr>
+</tbody>
+</table>
+<p>From this we see the vast majority of NA occur on 2021-03-26, which is one day before the ending day of the dataset. Thus, we can conclude that the rows for second to last day have been created for data input but have not updated by the time of data procurement. Thus, removing the last two days from the dataset will reduce potential error and will not affect analysis of mobility on COVID-19 rates from January 2020 to March 2021.</p>
+<pre><code>## Time difference of 428 days</code></pre>
+<p>Here we can see that there are 428 total days in the dataset so, lets narrow down the search to counties with &gt; 10% of missing data. (10% is chosen because 90% of available data could still provide accurate insights for trips data)</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">State</th>
+<th align="left">County</th>
+<th align="right">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">AK</td>
+<td align="left">Aleutians East Borough</td>
+<td align="right">62</td>
+</tr>
+<tr class="even">
+<td align="left">AK</td>
+<td align="left">Bristol Bay Borough</td>
+<td align="right">353</td>
+</tr>
+<tr class="odd">
+<td align="left">AK</td>
+<td align="left">Haines Borough</td>
+<td align="right">101</td>
+</tr>
+<tr class="even">
+<td align="left">AK</td>
+<td align="left">Lake and Peninsula Borough</td>
+<td align="right">295</td>
+</tr>
+<tr class="odd">
+<td align="left">AK</td>
+<td align="left">Skagway Municipality</td>
+<td align="right">141</td>
+</tr>
+<tr class="even">
+<td align="left">AK</td>
+<td align="left">Yakutat City and Borough</td>
+<td align="right">395</td>
+</tr>
+</tbody>
+</table>
+<p>There are 22 counties with high rates of NA values. Thus, these are the counties that could be most problematic when analyzing at a county scale. So, lets save the data frame of these top NA violators for future reference when further micro analysis is desired within these areas.</p>
+<p>Now to consider, would the NA values from certain counties affect State level analysis? To find out let’s plot the states with county NA values.</p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<p>Here we can see the states with the majority of the NA values, lets pick the top 5 (AK, NE, MT, TX, HI) and see how much the NA values impact the aggregate state values.</p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<p>We can see by the above stacked bar plot that the NA values account for a negligible amount of total values from each of the top NA states. Thus, the NA values should be of note, but of not much concern when considering total trips by distance for each state. <br></p>
+<p>With this analysis of NA values, the decision to leave the NA rows in the dataset is made for continuity of county timelines.</p>
 
 </div>
             </section>
@@ -138,7 +371,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/YOUR GITHUB USERNAME/YOUR REPO NAME/edit/main/04-missing.Rmd",
+"link": "https://github.com/dps2150/COVIDtravel/edit/main/04-missing.Rmd",
 "text": "Edit"
 },
 "history": {
@@ -146,7 +379,7 @@ gitbook.start({
 "text": null
 },
 "view": {
-"link": "https://github.com/YOUR GITHUB USERNAME/YOUR REPO NAME/blob/main/04-missing.Rmd",
+"link": "https://github.com/dps2150/COVIDtravel/blob/main/04-missing.Rmd",
 "text": null
 },
 "download": null,

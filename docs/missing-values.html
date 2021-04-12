@@ -24,7 +24,7 @@
 <meta name="author" content="Daniel Minwoo Pranav" />
 
 
-<meta name="date" content="2021-04-11" />
+<meta name="date" content="2021-04-12" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -52,6 +52,68 @@
 
 
 
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
@@ -97,7 +159,8 @@
             <section class="normal" id="section-">
 <div id="missing-values" class="section level1">
 <h1><span class="header-section-number">Chapter 4</span> Missing values</h1>
-<p>Ok, let us find some NA’s</p>
+<p>The only dataset with missing values was the Trips by Distance data from the U.S. DOT Bureau of Transportation Statistics.</p>
+<p>So, working with that set, let us find some NA’s</p>
 <table>
 <thead>
 <tr>
@@ -136,7 +199,7 @@ Number of NA’s County:
 </tr>
 </tbody>
 </table>
-<p>We can see here that the NA values only occur at the county level. So, lets find out where those NA’s exist.</p>
+<p>We can see here that the NA values only occur at the county level. So, let’s find out where those NA’s are hiding.</p>
 <pre><code>##       Date              State.FIPS        State         County.FIPS   
 ##  Min.   :2020-01-22   Min.   : 1.00   TX     :109474   Min.   : 1001  
 ##  1st Qu.:2020-05-08   1st Qu.:18.00   GA     : 68529   1st Qu.:18177  
@@ -185,7 +248,7 @@ Number of NA’s County:
 ##  3rd Qu.:  442.0         3rd Qu.:   150.0     
 ##  Max.   :90947.0         Max.   :125691.0     
 ##  NA&#39;s   :5779            NA&#39;s   :5779</code></pre>
-<p>From the summary we can see that there is an equal 5779 NA’s for each numeric column thus, upon further inspection, 5779 rows are fully incomplete for trips data. So, let us isolate the NA rows for further inspection.</p>
+<p>From the summary we can see that there is an equal 5779 NA’s for each numeric column thus, upon further inspection, 5779 rows are fully incomplete for trips data. So, let’s isolate those rows.</p>
 <p>Frist, since this data is a timeseries, let’s check the dates to see if there is a pattern.</p>
 <table>
 <thead>
@@ -281,9 +344,9 @@ count
 </tr>
 </tbody>
 </table>
-<p>From this we see the vast majority of NA occur on 2021-03-26, which is one day before the ending day of the dataset. Thus, we can conclude that the rows for second to last day have been created for data input but have not updated by the time of data procurement. Thus, removing the last two days from the dataset will reduce potential error and will not affect analysis of mobility on COVID-19 rates from January 2020 to March 2021.</p>
+<p>From this we see the vast majority of NA occur on 2021-03-26, which is one day before the ending day of the dataset. Thus, we can conclude that the rows for second to last day have been created for data input but have not updated by the time of data procurement. Thus, removing the last two days from the dataset will reduce potential error and will not affect analysis of mobility on COVID-19 rates from January 2020 to March 2021. Now to get the total number of days in the dataset.</p>
 <pre><code>## Time difference of 428 days</code></pre>
-<p>Here we can see that there are 428 total days in the dataset so, lets narrow down the search to counties with &gt; 10% of missing data. (10% is chosen because 90% of available data could still provide accurate insights for trips data)</p>
+<p>Here we can see that there are 428 total days in the dataset so, lets narrow down the search to counties with &gt; 10% of missing data. (10% is chosen because 90% of available data could still provide accurate insights for trips data) here is a sample:</p>
 <table>
 <thead>
 <tr class="header">
@@ -326,10 +389,11 @@ count
 </tbody>
 </table>
 <p>There are 22 counties with high rates of NA values. Thus, these are the counties that could be most problematic when analyzing at a county scale. So, lets save the data frame of these top NA violators for future reference when further micro analysis is desired within these areas.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw">save</span>(high.na, <span class="dt">file=</span><span class="st">&quot;high_NA_areas.RDS&quot;</span>)</a></code></pre></div>
 <p>Now to consider, would the NA values from certain counties affect State level analysis? To find out let’s plot the states with county NA values.</p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p>Here we can see the states with the majority of the NA values, lets pick the top 5 (AK, NE, MT, TX, HI) and see how much the NA values might impact the aggregate state values.</p>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
-<p>Here we can see the states with the majority of the NA values, lets pick the top 5 (AK, NE, MT, TX, HI) and see how much the NA values impact the aggregate state values.</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
 <p>We can see by the above stacked bar plot that the NA values account for a negligible amount of total values from each of the top NA states. Thus, the NA values should be of note, but of not much concern when considering total trips by distance for each state. <br></p>
 <p>With this analysis of NA values, the decision to leave the NA rows in the dataset is made for continuity of county timelines.</p>
 

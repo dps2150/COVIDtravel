@@ -1,6 +1,6 @@
 --- 
 title: "Covid Travel"
-author: "Daniel Minwoo Pranav"
+author: "Daniel Schmidle - dps2150 <br> Minwoo CHOI - mc5061 <br> Pranav Gopal - pg2685"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 ---
@@ -8,5 +8,6 @@ site: bookdown::bookdown_site
 # Introduction
 
 hello world
+this is new 
 
 

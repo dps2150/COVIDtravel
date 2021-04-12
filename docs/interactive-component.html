@@ -160,12 +160,29 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="interactive-component" class="section level1">
 <h1><span class="header-section-number">Chapter 6</span> Interactive component</h1>
 <script src="https://d3js.org/d3.v4.js"></script>
+<p><b>The Percentage of People NOT Staying at Home <br>
+VS <br>
+The Number of New Covid-19 Cases by State </b><br>
+To compare any state (or states) level of mobility against the number of new cases. <br><br></p>
 <!-- Initialize a select button -->
-<p><select id="selectButton"></select></p>
+<label for="selectButton"><b>% Not Staying At Home: </b></label>
+<select id="selectButton"></select><br>
+<div style="font-size:x-small">
+New Cases | % Not at Home
+</div>
 <!-- Create a div where the graph will take place -->
 <div id="my_dataviz">
 
 </div>
+<label for="selectButton"><b>New Covid-19 Cases</b></label>
+<select id="selectButton2"></select>
+<div id="dataviz2">
+
+</div>
+<p><br><br>With this tool we can see if stay at home orders worked on diminishing new cases, or if highly mobile states led to more cases. We can also compare neighboring states to see if one could have possibly affected another. <br><br><br><br></p>
+<p>Credit: <br>
+Base code used in this plot was originally created by Yan Holtz: <br>
+<a href="https://github.com/holtzy/D3-graph-gallery" class="uri">https://github.com/holtzy/D3-graph-gallery</a></p>
 <!-- Color Scale -->
 <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 <script>
@@ -184,18 +201,9 @@ var svg = d3.select("#my_dataviz")
     .attr("transform",
           "translate(" + margin.left + "," + margin.top + ")");
           
-                  
-          
-var svg2 = d3.select("#my_dataviz2")
-  .append("svg2")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-  .append("g2")
-    .attr("transform",
-          "translate(" + margin.left + "," + margin.top + ")");
 
 //Read the data
-d3.csv("https://raw.githubusercontent.com/dps2150/COVIDtravel/main/data/d3_covid.csv",
+d3.csv("https://raw.githubusercontent.com/dps2150/COVIDtravel/main/data/d3_trips.csv",
 
   function(d){
     return { year : d3.timeParse("%Y-%m-%d")(d.year), name:d.name, n : d.n }
@@ -232,6 +240,103 @@ d3.csv("https://raw.githubusercontent.com/dps2150/COVIDtravel/main/data/d3_covid
       .domain([0, d3.max(data, function(d) { return +d.n; })])
       .range([ height, 0 ]);
     svg.append("g")
+      .call(d3.axisRight(y));
+
+    // Initialize line with first group of the list
+    var line = svg
+      .append('g')
+      .append("path")
+        .datum(data.filter(function(d){return d.name==allGroup[0]}))
+        .attr("d", d3.line()
+          .x(function(d) { return x(d.year) })
+          .y(function(d) { return y(+d.n) })
+        )
+        .attr("stroke", function(d){ return myColor("valueA") })
+        .style("stroke-width", 2.5)
+        .style("fill", "none")
+
+    // A function that update the chart
+    function update(selectedGroup) {
+
+      // Create new data with the selection?
+      var dataFilter = data.filter(function(d){return d.name==selectedGroup})
+        
+      // Give these new data to update line
+      line
+          .datum(dataFilter)
+          .transition()
+          .duration(1000)
+          .attr("d", d3.line()
+            .x(function(d) { return x(d.year) })
+            .y(function(d) { return y(+d.n) })
+          )
+          .attr("stroke", function(d){ return myColor(selectedGroup) })
+    }
+    // When the button is changed, run the updateChart function
+    d3.select("#selectButton").on("change", function(d) {
+        // recover the option that has been chosen
+        var selectedOption = d3.select(this).property("value")
+        // run the updateChart function with this selected option
+        update(selectedOption)
+    })
+})
+</script>
+<script>
+
+// set the dimensions and margins of the graph
+var margin = {top: 10, right: 30, bottom: 30, left: 60},
+    width = 600 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
+
+// append the svg object to the body of the page
+var svg2 = d3.select("#dataviz2")
+  .append("svg2")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+          
+                  
+        
+//Read the data
+d3.csv("https://raw.githubusercontent.com/dps2150/COVIDtravel/main/data/d3_covid.csv",
+
+  function(d){
+    return { year : d3.timeParse("%Y-%m-%d")(d.year), name:d.name, n : d.n }
+  },
+    function(data) {
+
+    // List of groups (here I have one group per column)
+    var allGroup = d3.map(data, function(d){return(d.name)}).keys()
+
+    // add the options to the button
+    d3.select("#selectButton2")
+      .selectAll('myOptions')
+        .data(allGroup)
+      .enter()
+        .append('option')
+      .text(function (d) { return d; }) // text showed in the menu
+      .attr("value", function (d) { return d; }) // corresponding value returned by the button
+
+    // A color scale: one color for each group
+    var myColor = d3.scaleOrdinal()
+      .domain(allGroup)
+      .range(d3.schemeSet2);
+
+    // Add X axis --> it is a date format
+    var x = d3.scaleTime()
+      .domain(d3.extent(data, function(d) { return d.year; }))
+      .range([ 0, width ]);
+    svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      //.call(d3.axisBottom(x).ticks(5));
+
+    // Add Y axis
+    var y = d3.scaleLinear()
+      .domain([0, d3.max(data, function(d) { return +d.n; })])
+      .range([ height, 0 ]);
+    svg.append("g")
       .call(d3.axisLeft(y));
 
     // Initialize line with first group of the list
@@ -252,7 +357,6 @@ d3.csv("https://raw.githubusercontent.com/dps2150/COVIDtravel/main/data/d3_covid
 
       // Create new data with the selection?
       var dataFilter = data.filter(function(d){return d.name==selectedGroup})
-
         
       // Give these new data to update line
       line
@@ -265,19 +369,14 @@ d3.csv("https://raw.githubusercontent.com/dps2150/COVIDtravel/main/data/d3_covid
           )
           .attr("stroke", function(d){ return myColor(selectedGroup) })
     }
-
     // When the button is changed, run the updateChart function
-    d3.select("#selectButton").on("change", function(d) {
+    d3.select("#selectButton2").on("change", function(d) {
         // recover the option that has been chosen
         var selectedOption = d3.select(this).property("value")
         // run the updateChart function with this selected option
         update(selectedOption)
     })
-
 })
-
-
-
 </script>
 
 </div>

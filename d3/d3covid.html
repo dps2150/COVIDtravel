@@ -44,7 +44,7 @@ var svg2 = d3.select("#my_dataviz2")
           "translate(" + margin.left + "," + margin.top + ")");
 
 //Read the data
-d3.csv("https://raw.githubusercontent.com/dps2150/test/main/test-trips.csv", 
+d3.csv("https://raw.githubusercontent.com/dps2150/COVIDtravel/main/data/d3_covid.csv", 
 
   function(d){
     return { year : d3.timeParse("%Y-%m-%d")(d.year), name:d.name, n : d.n }

@@ -391,9 +391,9 @@ count
 <p>There are 22 counties with high rates of NA values. Thus, these are the counties that could be most problematic when analyzing at a county scale. So, lets save the data frame of these top NA violators for future reference when further micro analysis is desired within these areas.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw">save</span>(high.na, <span class="dt">file=</span><span class="st">&quot;high_NA_areas.RDS&quot;</span>)</a></code></pre></div>
 <p>Now to consider, would the NA values from certain counties affect State level analysis? To find out let’s plot the states with county NA values.</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-195-1.png" width="672" /></p>
 <p>Here we can see the states with the majority of the NA values, lets pick the top 5 (AK, NE, MT, TX, HI) and see how much the NA values might impact the aggregate state values.</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-196-1.png" width="672" /></p>
 <p>We can see by the above stacked bar plot that the NA values account for a negligible amount of total values from each of the top NA states. Thus, the NA values should be of note, but of not much concern when considering total trips by distance for each state. <br></p>
 <p>With this analysis of NA values, the decision to leave the NA rows in the dataset is made for continuity of county timelines.</p>
 

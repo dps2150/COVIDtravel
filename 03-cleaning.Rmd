@@ -1,1 +1,222 @@
 # Data transformation
+
+
+```{r eval=FALSE, echo=TRUE}
+# this prevents package loading message from appearing in the rendered version of your problem set
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE,
+                      message = FALSE)
+library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(lubridate)
+library(scales)
+library(choroplethr)
+library(choroplethrMaps)
+library(Hmisc)
+library(ggthemes)
+library(viridis)
+library(geofacet)
+```
+
+
+set working directory where .csv files are saved
+```{r eval=FALSE, echo=TRUE}
+# rm(list=ls())
+setwd('C:/Users/Administrator.WFC-TRD-WS20/Desktop/DSI - Spring 21/STAT GR5702 EDAV/Final Project')
+```
+
+
+data download
+```{r eval=FALSE, echo=TRUE}
+covid <- read.csv("covid_confirmed_usafacts.csv", check.names=FALSE)
+county_population <- read.csv('covid_county_population_usafacts.csv')
+```
+
+
+covid data at county level (cumulative cases)
+```{r eval=FALSE, echo=TRUE}
+covid.county <- covid[covid$countyFIPS!=0,]
+covid.county  <- pivot_longer(covid.county,
+                              cols=5:443,names_to="Date",values_to="Positive") 
+covid.county$Date <- as.Date(covid.county$Date, format="%Y-%m-%d")
+colnames(covid.county)[1] <- "County.FIPS"
+colnames(covid.county)[2] <- "County.Name"
+
+colnames(county_population)[1] <- "County.FIPS"
+county_population <- county_population[county_population$County.FIPS!=0,]
+
+covid.county.merged <- merge(covid.county, county_population[c("County.FIPS", "population")], by="County.FIPS")
+```
+
+
+covid data at county level (cumulative cases), cases converted to percentage. county is sub-grouped into 3 sizes
+```{r eval=FALSE, echo=TRUE}
+describe(county_population$population)
+
+b <- c(-Inf, 10890, 213548, Inf)
+names <- c('Small', 'Medium', 'Large')
+covid.county.merged$population.cat <- cut(covid.county.merged$population, breaks=b, labels=names)
+
+covid_county_pct <- covid.county.merged %>% 
+  mutate(Positive = Positive / population * 100) %>% 
+  mutate(across(where(is.numeric), ~ round(., 2)));
+```
+
+covid data at county level, now positive case # shows net daily change
+```{r eval=FALSE, echo=TRUE}
+covid_county_net <- covid.county.merged %>% 
+  group_by(County.FIPS) %>% 
+  mutate(lag=lag(Positive)) %>% 
+  mutate(Positive.change = Positive - lag)
+covid_county_net <- covid_county_net[covid_county_net$Date!="2020-01-22",]
+```
+
+
+covid data at state level (cumulative cases), cases converted to percentage. state is sub-grouped into 3 sizes
+```{r eval=FALSE, echo=TRUE}
+covid.state <- covid.county.merged %>% 
+  group_by(Date,State) %>% 
+  dplyr::summarise(Positive_count = sum(Positive))
+
+covid.population <- covid.county.merged %>% 
+  group_by(Date,State) %>% 
+  dplyr::summarise(State_population = sum(population))
+
+covid.merged <- merge(covid.state, covid.population)
+
+describe(covid.merged$State_population)
+b <- c(-Inf, 1787065, 12671821, Inf)
+names <- c('Small', 'Medium', 'Large')
+covid.merged$population.cat <- cut(covid.merged$State_population, breaks=b, labels=names)
+
+covid_state_pct <- covid.merged %>% 
+  mutate(Positive_count = Positive_count / State_population * 100) %>% 
+  mutate(across(where(is.numeric), ~ round(., 2)));
+
+colnames(covid_state_pct)[3] <- "Positive_pct"
+```
+
+
+covid data at state level, now positive case # shows net daily change
+```{r eval=FALSE, echo=TRUE}
+covid_state_net <- covid.merged %>% 
+  group_by(State) %>% 
+  mutate(lag=lag(Positive_count)) %>% 
+  mutate(Positive.change = Positive_count - lag) 
+covid_state_net <- covid_state_net[covid_state_net$Date!="2020-01-22",]
+```
+
+
+covid data monthly at both county / state level
+```{r eval=FALSE, echo=TRUE}
+covid_state_monthly <- covid_state_net %>% 
+  group_by(State, population.cat, month=lubridate::floor_date(Date, "month")) %>% 
+  dplyr::summarise(positive_monthly=sum(Positive_count))
+
+covid_state_pct_monthly <- covid_state_pct %>% 
+  group_by(State, population.cat, month=lubridate::floor_date(Date, "month")) %>% 
+  dplyr::summarise(positive_pct_monthly=max(Positive_pct))
+
+covid_county_monthly <- covid_county_net %>% 
+  group_by(County.Name, State, population.cat, month=lubridate::floor_date(Date, "month")) %>% 
+  dplyr::summarise(positive_monthly=sum(Positive.change))
+
+covid_county_monthly <- covid_county_net %>% 
+  group_by(County.Name, State, population.cat, month=lubridate::floor_date(Date, "month")) %>% 
+  dplyr::summarise(positive_monthly=sum(Positive.change))
+
+covid_county_pct_monthly <- covid_county_pct %>% 
+  group_by(County.Name, State, population.cat, month=lubridate::floor_date(Date, "month")) %>% 
+  dplyr::summarise(positive_pct_monthly=max(Positive))
+
+covid_state_cum_monthly <- covid.merged %>% 
+  group_by(State, population.cat, month=lubridate::floor_date(Date, "month")) %>% 
+  dplyr::summarise(positive_monthly=max(Positive_count))
+```
+
+
+data save
+```{r eval=FALSE, echo=TRUE}
+save(covid_county_pct, 
+     covid_county_net, 
+     covid_state_pct, 
+     covid_state_net, 
+     covid_state_monthly,
+     covid_state_pct_monthly,
+     covid_county_monthly,
+     covid_county_pct_monthly,
+     covid_state_cum_monthly,
+     file = 'covid_cases_v5.Rda')
+```
+
+
+```{r eval=FALSE, echo=TRUE}
+library(tidyr)
+```
+
+
+Get the Trips by Distance 
+
+```{r eval=FALSE, echo=TRUE}
+T_by_D <- read.csv("Trips_by_Distance.csv")
+
+T_by_D$Date <- as.Date(T_by_D$Date, format="%Y/%m/%d")
+
+trips <- T_by_D[T_by_D$Date >= "2020-01-22" ,]
+trips <- subset(trips, select=-Row.ID)
+colnames(trips)[c(4,6)] <- c("State","County")
+
+#remove NA rows
+#trips <- trips[!(is.na(trips$Number.of.Trips)),]
+```
+
+Seperate the trips by National, State, and County levels
+
+```{r eval=FALSE,echo=TRUE}
+trips.national <- subset(trips,Level=="National", select= -c(State.FIPS,State,
+                                                              County.FIPS,County))
+trips.state <- subset(trips,Level=="State", -c(Level,County.FIPS,County))
+trips.county <- subset(trips,Level=="County", -Level)
+```
+
+save the trip data 
+
+```{r eval=FALSE,echo=TRUE}
+save(trips.national,trips.state,trips.county, file="trips.RData")
+```
+
+
+Get the Covid Rates data
+
+```{r eval=FALSE,echo=TRUE}
+covid <- read.csv("covid_confirmed.csv", check.names=FALSE)
+
+covid.county <- covid[covid$countyFIPS!=0,]
+
+covid.county  <- pivot_longer(covid.county,
+                             cols=5:443,names_to="Date",values_to="Positive") 
+covid.county$Date <- as.Date(covid.county$Date, format="%Y-%m-%d")
+colnames(covid.county)[c(1:2,4)] <- c("County.FIPS", "County","State.FIPS")
+```
+
+Split covid data into State and county sets 
+
+```{r eval=FALSE,echo=TRUE}
+covid.state <- covid.county %>% 
+  group_by(State, State.FIPS, Date) %>% 
+  summarise(Positive = sum(Positive)) %>% 
+  mutate(New = ifelse(Positive-lag(Positive)>0,Positive-lag(Positive),0)) %>% 
+  replace(is.na(.),0)
+
+covid.county <- covid.county %>% 
+  group_by(State, State.FIPS, County, County.FIPS, Date) %>% 
+  summarise(Positive = sum(Positive)) %>% 
+  mutate(New = ifelse(Positive-lag(Positive)>0,Positive-lag(Positive),0)) %>% 
+  replace(is.na(.),0) 
+```
+
+save it 
+
+```{r eval=FALSE, echo=TRUE}
+save(covid.state,covid.county, file="covid.RData")
+```

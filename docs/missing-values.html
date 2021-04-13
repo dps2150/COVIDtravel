@@ -24,7 +24,7 @@
 <meta name="author" content="Daniel Schmidle - dps2150   Minwoo CHOI - mc5061   Pranav Gopal - pg2685" />
 
 
-<meta name="date" content="2021-04-12" />
+<meta name="date" content="2021-04-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -50,6 +50,13 @@
 
 
 
+<script src="libs/htmlwidgets-1.5.1/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.9.2/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.0.0/css/crosstalk.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.0.0/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-1.52.2/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-1.52.2/plotly-latest.min.js"></script>
 
 
 <style type="text/css">
@@ -135,7 +142,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2" data-path="data-sources.html"><a href="data-sources.html"><i class="fa fa-check"></i><b>2</b> Data sources</a></li>
 <li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a></li>
 <li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a></li>
-<li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a></li>
+<li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a><ul>
+<li class="chapter" data-level="5.1" data-path="results.html"><a href="results.html#covid-19-in-the-united-states"><i class="fa fa-check"></i><b>5.1</b> Covid-19 in the United States</a></li>
+<li class="chapter" data-level="5.2" data-path="results.html"><a href="results.html#mobility-and-covid-19"><i class="fa fa-check"></i><b>5.2</b> Mobility and Covid-19</a></li>
+<li class="chapter" data-level="5.3" data-path="results.html"><a href="results.html#air-travel-and-covid-19"><i class="fa fa-check"></i><b>5.3</b> Air Travel and Covid-19</a></li>
+</ul></li>
 <li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a></li>
 <li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a></li>
 <li class="divider"></li>
@@ -391,9 +402,9 @@ count
 <p>There are 22 counties with high rates of NA values. Thus, these are the counties that could be most problematic when analyzing at a county scale. So, lets save the data frame of these top NA violators for future reference when further micro analysis is desired within these areas.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw">save</span>(high.na, <span class="dt">file=</span><span class="st">&quot;high_NA_areas.RDS&quot;</span>)</a></code></pre></div>
 <p>Now to consider, would the NA values from certain counties affect State level analysis? To find out let’s plot the states with county NA values.</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-195-1.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
 <p>Here we can see the states with the majority of the NA values, lets pick the top 5 (AK, NE, MT, TX, HI) and see how much the NA values might impact the aggregate state values.</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-196-1.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
 <p>We can see by the above stacked bar plot that the NA values account for a negligible amount of total values from each of the top NA states. Thus, the NA values should be of note, but of not much concern when considering total trips by distance for each state. <br></p>
 <p>With this analysis of NA values, the decision to leave the NA rows in the dataset is made for continuity of county timelines.</p>
 

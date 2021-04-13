@@ -479,8 +479,6 @@ Taking a look at specific states might give us more information. Florida and New
 
 The plots below isolate the two plots shown above for these two states. It is clear from the plot on the left, after the initial April shut down of flights, the total passenger travel to Florida as a destination significantly increased in comparison to flights to New York. This is due to people in the East Coast (New York, Chicago, Georgia etc.) escaping the winter for the hot beach weather in Florida. Taking a look at the cumulative Covid cases on the right plot, initially New York was significantly harder hit in the months of April to June in comparison to Florida. However, from July onward, Florida Covid cases spiked upwards and overtook New York. We can state that the continuous increase in traffic to Florida may have played a role in the increasing Covid cases, however, as discussed above, it could be just due to a lack of social distancing and mask wearing that led to this rise. Travel to New York was consistently down from April to December, and yet the cumulative cases continued to rise in the later months, to a similar number as Florida. 
 
-The only way to conclude the correlation between flight traffic and Covid spikes is with daily flight data. The data from the Bureau of Transportation Statistics aggregates flight data by month. If we had access to daily flight data for 2020, that would give us the ability to compare with daily Covid cases and see if increased air travel during a specific time (ex. spring break) accounted for a Covid spike in the following two weeks. However, this flight data is not accessible, maybe only through commercial resources, and the amount of flights daily in America, let alone in a year, would be a huge dataset that would be difficult to pre-process. 
-
 
 ```{r, fig.width=10,fig.height=4}
 # Two similar populations Comparison (NY and FL)
@@ -508,4 +506,7 @@ gridExtra::grid.arrange(plt1,plt2,ncol=2,nrow=1)
 
 
 ```
+
+
+The only way to conclude the correlation between flight traffic and Covid spikes is with daily flight data. The data from the Bureau of Transportation Statistics aggregates flight data by month. If we had access to daily flight data for 2020, that would give us the ability to compare with daily Covid cases and see if increased air travel during a specific time (ex. spring break) accounted for a Covid spike in the following two weeks. However, this flight data is not accessible, maybe only through commercial resources, and the amount of flights daily in America, let alone in a year, would be a huge dataset that would be difficult to pre-process. 
 

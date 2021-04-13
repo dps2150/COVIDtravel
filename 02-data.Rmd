@@ -1,2 +1,28 @@
 # Data sources
 
+We started searching for reliable Covid data. Given our focus on the US region, we preferred finding a source that contains detailed data for all US states as well as counties. 
+
+As usual, we could not find an existing data file that was pre-cleaned, organized for our specific needs, nothing was production-ready off-the-shelf. But Covid data found at ‘usafacts.org’ was most suitable for time-series analysis at state and county level. The same website also has population data for US counties available for download, that was handy when we convert daily Covid cases into percentage rates in each region.
+Main data file, ‘covid_confirmed_usafacts.csv’, has county FIPS / county name / state FIPS / state name, followed by columns of time-series data of Covid cases (cumulative).
+
+Another data file we downloaded, ‘covid_county_population_usafacts.csv’, has county information as well as population number.
+
+USAFACTS.org 
+Covid cases by county and state 
+https://usafacts.org/visualizations/coronavirus-covid-19-spread-map/
+
+Next, we needed to find data that would describe the mobility of people within the U.S. How many people were staying at home? How many people were traveling? The U.S. DOT Bureau of Transportation proved an incredible source of information with mobility data for all States and Counties within the U.S. This dataset provides daily aggregate totals of population staying at home, not staying at home, and total number of trips at the national, state, and county levels. More specifically, the dataset also provides daily numbers of trips by distance traveled in miles {<1, 1-3, 3-5, 5-10, 25-50, 50-100, 100-250, 250-500, <=500} for each level as well. 
+
+U.S. Department of Transportation 
+Bureau of Transportation Statistics
+Trips by Distance
+https://data.bts.gov/Research-and-Statistics/Trips-by-Distance/w96p-f2qv
+
+Finally, we wanted to understand air travel as a possible contributing factor to the spread of Covid. The Bureau of Transportation Statistics has a comprehensive dataset containing monthly domestic air travel data reported by U.S. airlines: including number of transported passengers, departures performed, and origin and destination cities in 2020. Is it possible to correlate significant air travel to certain states in the U.S. to spikes in Covid cases in those states?
+
+U.S. Department of Transportation 
+Bureau of Transportation Statistics
+Air Carriers : T-100 Domestic Market (All Carriers)
+https://transtats.bts.gov/DL_SelectFields.asp?gnoyr_VQ=FIM&QO_fu146_anzr=Nv4%20Pn44vr45
+
+

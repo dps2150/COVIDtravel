@@ -1,7 +1,7 @@
 # Data transformation
 
 
-```{r eval=FALSE, echo=TRUE}
+```{r eval=FALSE}
 # this prevents package loading message from appearing in the rendered version of your problem set
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE,
                       message = FALSE)
@@ -18,12 +18,6 @@ library(viridis)
 library(geofacet)
 ```
 
-
-set working directory where .csv files are saved
-```{r eval=FALSE, echo=TRUE}
-# rm(list=ls())
-setwd('C:/Users/Administrator.WFC-TRD-WS20/Desktop/DSI - Spring 21/STAT GR5702 EDAV/Final Project')
-```
 
 
 data download
